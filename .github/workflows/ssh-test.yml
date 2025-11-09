@@ -16,4 +16,4 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-          ssh -i ~/.ssh/id_ed25519 brewhale@$SSH_HOST "chmod -R 755 /brewhale/test && echo 'Права изменены!'"
+          ssh -i ~/.ssh/id_ed25519 brewhale@$SSH_HOST "chmod -R 755 /home/brewhale/test && echo 'Права изменены!'"
