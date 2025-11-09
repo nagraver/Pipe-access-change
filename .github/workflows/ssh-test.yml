@@ -11,10 +11,9 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-          ssh -i ~/.ssh/id_ed25519 "$SSH_USER@$SSH_HOST" "chmod -R 755 /home/brewhlale/test && echo 'Права изменены!'"
+          ssh -i ~/.ssh/id_ed25519 brewhale@$SSH_HOST "chmod -R 755 /root/test && echo 'Права изменены!'"
