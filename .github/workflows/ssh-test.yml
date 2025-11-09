@@ -4,33 +4,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  connect-to-server:
+  connect:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup SSH key
+      - name: Connect and change permissions
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          # Для простоты в примере отключаем строгую проверку known_hosts.
-          # В проде лучше заранее добавить ключ в known_hosts.
           echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-
-      - name: Connect and run command
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-        run: |
-          # если SSH_USER пустой, используем root
-          SSH_USER="${SSH_USER:-root}"
-          ssh -i ~/.ssh/id_ed25519 "$SSH_USER@$SSH_HOST" "echo '✅ Успешное подключение!'; whoami; ls -la /"
-
-      - name: Change directory permissions
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-        run: |
-          SSH_USER="${SSH_USER:-root}"
           ssh -i ~/.ssh/id_ed25519 "$SSH_USER@$SSH_HOST" "chmod -R 755 /home/brewhlale/test && echo 'Права изменены!'"
